@@ -1,9 +1,9 @@
 # Infinispan on Kubernetes
 
-This repository contains demonstrates how to run Infinispan on a vanilla Kubernetes set up.
+This repository demonstrates how to run Infinispan on a vanilla Kubernetes set up.
 
-For quick local testing, [Minikube](https://kubernetes.io/docs/setup/minikube/) offers an easy way for running things locally.
-This README file concentrates on showing how to run the templates on top of Minikube.
+For quick local testing, [Minikube](https://kubernetes.io/docs/setup/minikube/) offers an easy way for running Kubernetes on your local environment.
+This README file concentrates on showing how to run Infinispan on top of Minikube.
 
 
 ## Minikube
