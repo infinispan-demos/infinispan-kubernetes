@@ -25,16 +25,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: MGMT_USER
-          valueFrom:
-            secretKeyRef:
-              key: management-user
-              name: infinispan-server
-        - name: MGMT_PASS
-          valueFrom:
-            secretKeyRef:
-              key: management-password
-              name: infinispan-server
         - name: APP_USER
           valueFrom:
             secretKeyRef:
