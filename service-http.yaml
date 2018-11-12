@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: The web server's HTTP port.
+  labels:
+    application: infinispan-server
+  name: infinispan-server-http
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    deploymentConfig: infinispan-server

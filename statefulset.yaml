@@ -1,0 +1,85 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  labels:
+    application: infinispan-server
+  name: infinispan-server
+spec:
+  replicas: 3
+  serviceName: infinispan-server-headless
+  template:
+    metadata:
+      labels:
+        application: infinispan-server
+        deploymentConfig: infinispan-server
+      name: infinispan-server
+    spec:
+      containers:
+      - args:
+        - cloud
+        - -Djboss.default.jgroups.stack=kubernetes
+        env:
+        - name: KUBERNETES_LABELS
+          value: application=infinispan-server
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MGMT_USER
+          valueFrom:
+            secretKeyRef:
+              key: management-user
+              name: infinispan-server
+        - name: MGMT_PASS
+          valueFrom:
+            secretKeyRef:
+              key: management-password
+              name: infinispan-server
+        - name: APP_USER
+          valueFrom:
+            secretKeyRef:
+              key: application-user
+              name: infinispan-server
+        - name: APP_PASS
+          valueFrom:
+            secretKeyRef:
+              key: application-password
+              name: infinispan-server
+        image: jboss/infinispan-server:9.4.1.Final
+        livenessProbe:
+          exec:
+            command:
+            - /usr/local/bin/is_running.sh
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 80
+        name: infinispan-server
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9990
+          name: management
+          protocol: TCP
+        - containerPort: 8888
+          name: ping
+          protocol: TCP
+        - containerPort: 11222
+          name: hotrod
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /usr/local/bin/is_healthy.sh
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 80
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: 512Mi
+      terminationGracePeriodSeconds: 120
