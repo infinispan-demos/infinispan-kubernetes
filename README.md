@@ -46,19 +46,7 @@ Finally, add `kubectl` command line tool to the `PATH` of your shell.
 In this section you will learn how to spin a 3-node Infinispan Server cluster on Kubernetes.
 You will also learn how to store and retrieve some data using the HTTP REST endpoint.
 
-To form the cluster, Infinispan Server nodes query the Kubernetes API to find out about other nodes.
-By default, this API is not accessible so before starting any clusters, access needs to be enabled.
-Without this operation, each node would act independently and would not communicate with each other:
-
-```bash
-kubectl create rolebinding infinispan \
-  --clusterrole=view \
-  --user=default \
-  --namespace=default \
-  --group=system:serviceaccounts
-``` 
-
-Then, apply the Kubernetes descriptors provided in this repository:
+First, apply the Kubernetes descriptors provided in this repository:
 
 ```bash
 kubectl apply -f .
@@ -104,6 +92,54 @@ Please open an issue in this repository with any feedback or issues encountered.
 ## Extras
 
 This section contains extra information related this repository.
+
+
+### Descriptor Files
+
+In this section you'll find information about the Kubernetes files provided in this repository:
+
+
+#### `rolebinding.yaml`
+
+To form the cluster, Infinispan Server nodes query the Kubernetes API to find out about other nodes.
+By default, this API is not accessible so before starting any clusters, access needs to be enabled.
+This file gives the default user `view` role so that it can query the API.
+Without this descriptor, each node would act independently and would not communicate with each other.
+
+For reference, instead of applying this file, executing this command will have the same effect:
+
+```bash
+kubectl create rolebinding infinispan \
+  --clusterrole=view \
+  --user=default \
+  --namespace=default \
+  --group=system:serviceaccounts
+```
+
+
+#### `secret.yaml`
+
+Sets up a secret that includes a username and password for accessing Infinispan via Hot Rod or HTTP REST endpoints.
+
+
+#### `service-hotrod.yaml`
+
+Exposes the Hot Rod port as a Kubernetes service.
+This port enables data to be queried and stored using one of Infinispan's Hot Rod clients.
+Client implementations are available in Java, C/C++, Node.js and others.
+
+
+#### `service-http.yaml`
+
+Exposes the HTTP REST port as a Kubernetes service.
+This port enables data to be queried and stored the Infinispan's HTTP REST API.
+
+
+#### `statefulset.yaml`
+
+Wraps the Infinispan Server around a stateful set.
+Amongst other details, it contains information such as:
+number of replicas to start, container port mappings and liveness/readiness probe settings.
 
 
 ### Delete data
