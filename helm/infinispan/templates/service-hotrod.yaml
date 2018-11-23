@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "infinispan.fullname" . }}-{{ .Values.service.hotrod.name }}
+  labels:
+    app.kubernetes.io/name: {{ include "infinispan.name" . }}
+    helm.sh/chart: {{ include "infinispan.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  {{ template "infinispan.service" .Values.service.hotrod }}
+  selector:
+    app.kubernetes.io/name: {{ include "infinispan.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
