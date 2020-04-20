@@ -1,3 +1,5 @@
+> These instructions are only valid for the Infinispan 9.4.x image which is no longer supported. The recommended way to consume Infinispan 10.x and beyond with Kubernetes is via the [Operator](https://github.com/infinispan/infinispan-operator). If direct use of the Infinispan image is required, instructions on how to form a cluster on Kubernetes are provided in the [image repository](https://github.com/infinispan/infinispan-images).
+
 # Infinispan on Kubernetes
 
 This repository demonstrates how to run Infinispan on a vanilla Kubernetes set up.
